@@ -1,0 +1,194 @@
+:root {
+    font-size: 2vmin;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+}
+
+
+#left {
+    background-color: gray;
+    max-width: 15rem;
+    height: 100%;
+    word-wrap: break-word;
+}
+
+.slide-in {
+    animation: slide-in ease 0.2s forwards;
+}
+
+.slide-out {
+    animation: slide-out ease 0.2s forwards;
+}
+
+.fade-in {
+    animation: fade-in ease-in 0.5s;
+}
+
+.fade-out {
+    animation: fade-out ease 0.5s forwards;
+}
+
+@keyframes slide-in {
+    0% {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slide-out {
+    0% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes fade-out {
+    100% {
+        opacity: 0;
+    }
+}
+
+#input {
+    cursor: pointer;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    font-size: 0px;
+    opacity: 0;
+}
+
+::-webkit-file-upload-button {
+    cursor: pointer;
+}
+
+.center {
+    left: 50%;
+    top: 50%;
+    position: absolute;
+    margin: 0;
+    transform: translate(-50%, -50%);
+}
+
+.centerX {
+    left: 50%;
+    position: absolute;
+    margin: 0;
+    transform: translateX(-50%);
+}
+
+.menuButton {
+    position: relative;
+    background-color: rgb(69, 72, 75);
+    width: 100%;
+    color: white;
+}
+
+#export {
+    cursor: pointer;
+}
+
+#close {
+    cursor: pointer;
+    position: absolute;
+    background-color: rgb(69, 72, 75);
+    width: 3rem;
+    right: 0;
+    height: 100%;
+    color: white;
+}
+
+.close2 {
+    position: relative;
+    width: 100%;
+    color: white;
+    height: 3rem;
+}
+
+.x {
+    width: 80%;
+    height: 80%;
+}
+
+
+
+
+#timerContainer {
+    width: 6rem;
+    height: 6rem;
+    top: 1rem;
+    left: 1rem;
+    position: absolute;
+    background-color: rgb(0, 0, 0);
+    border-radius: 50%;
+    transition: opacity 0.25s ease;
+}
+
+#timerTimer {
+    width: 100%;
+    height: 100%;
+    background: conic-gradient(rgba(0,0,0,0) 0% 0%, rgba(255,255,255,255) 0% 100%);
+    border-radius: 50%;
+    position: absolute;
+}
+
+#timerTimer2 {
+    background-color: black;
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+    position: absolute;
+}
+
+
+.buzzerEnabled {
+    cursor: pointer;
+    transition: background-color 0.25s ease;
+    background-color: rgb(110, 53, 53);
+    box-shadow: 3px 6px 7px rgba(0, 0, 0, 0.3);
+    border-radius: 1rem;
+    color: #F0F0F0;
+}
+
+
+.buzzerDisabled {
+    cursor: default;
+    background-color: rgb(56, 56, 56);
+    box-shadow: 3px 6px 7px rgba(0, 0, 0, 0.3);
+    border-radius: 1rem;
+    pointer-events: none;
+    color: rgb(88, 88, 88);
+}
+@media (hover: hover) {
+    .buzzerEnabled:hover{
+        background-color: rgb(163, 67, 60);
+    }
+    #timerContainer:hover {
+        opacity: 0.1;
+    }
+}
