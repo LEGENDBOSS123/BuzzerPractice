@@ -158,7 +158,7 @@ speechSynthesis.onvoiceschanged = function(e){
     setVoices();
     var xx = 0;
     for(var i of window.speechSynthesis.getVoices()){
-        if(window.Navigator.onLine && i.name.toLowerCase().includes("google") && i.name.toLowerCase().includes("uk") && !i.name.toLowerCase().includes("female")){
+        if(window.navigator.onLine && i.name.toLowerCase().includes("google") && i.name.toLowerCase().includes("uk") && !i.name.toLowerCase().includes("female")){
             message.voice = i;
             document.getElementById("selectVoices").selectedIndex = xx;
             break;
@@ -171,19 +171,6 @@ window.addEventListener("online", setVoices);
 window.addEventListener("offline", setVoices);
 
 
-var inter = setInterval(function(){
-    var voice = null;
-
-    for(var i of window.speechSynthesis.getVoices()){
-        if(i.name.toLowerCase().includes("google") && i.name.toLowerCase().includes("uk") && !i.name.toLowerCase().includes("female")){
-            voice = i;
-            break;
-        }
-    }
-
-    //message.voice = voice;
-    if(voice != null) clearInterval(inter);
-}, 100);
 
 var sanitize = function (text) {
     var element = document.createElement("div");
@@ -208,8 +195,12 @@ var speak = async function (text, showOnScreen, txt2show = text, id = "question"
             return;
         }
         if(!window.speechSynthesis.speaking){ 
+
             if(!showOnScreen){
                 document.getElementById(id).innerHTML = "DONE SPEAKING";
+            }
+            else{
+                document.getElementById(id).innerHTML = textToShow.replaceAll("\n", "<br>");
             }
             return;
         }
