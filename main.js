@@ -149,6 +149,7 @@ var setVoices = function(){
 
 document.getElementById("selectVoices").addEventListener("change", function(e){
     message.voice = allVoices.find(i => i.name == e.target.value);
+    localStorage.setItem("voice", e.target.value);
 });
 
 
@@ -158,6 +159,11 @@ speechSynthesis.onvoiceschanged = function(e){
     setVoices();
     var xx = 0;
     for(var i of window.speechSynthesis.getVoices()){
+        if(localStorage.getItem("voice") == i.name){
+            message.voice = i;
+            document.getElementById("selectVoices").selectedIndex = xx;
+            break;
+        }
         if(window.navigator.onLine && i.name.toLowerCase().includes("google") && i.name.toLowerCase().includes("uk") && !i.name.toLowerCase().includes("female")){
             message.voice = i;
             document.getElementById("selectVoices").selectedIndex = xx;
@@ -299,7 +305,7 @@ var startQuestion = async function(x){
             disableBuzzer();
             await sleep(3000);
             hideTimer();
-            await speak("The answer was " + x.spokenAnswer, true, x.answer, "answer");
+            await speak("The answer was " + x.spokenAnswer ?? x.answer, true, x.answer, "answer");
             document.getElementById("question").innerHTML = txt;
             enableBuzzer();
             currentQuestion = null;
@@ -309,7 +315,7 @@ var startQuestion = async function(x){
             beepTimer();
             await sleep(2500);
             hideTimer();
-            await speak("Times up. The answer was " + x.spokenAnswer, true, x.answer, "answer");
+            await speak("Times up. The answer was " + x.spokenAnswer ?? x.answer, true, x.answer, "answer");
             document.getElementById("question").innerHTML = txt;
             await sleep(1000);
             enableBuzzer();
