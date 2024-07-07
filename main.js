@@ -162,12 +162,16 @@ speechSynthesis.onvoiceschanged = function(e){
         if(localStorage.getItem("voice") == i.name){
             message.voice = i;
             document.getElementById("selectVoices").selectedIndex = xx;
-            break;
+            return;
         }
+        xx++;
+    }
+    xx = 0;
+    for(var i of window.speechSynthesis.getVoices()){
         if(window.navigator.onLine && i.name.toLowerCase().includes("google") && i.name.toLowerCase().includes("uk") && !i.name.toLowerCase().includes("female")){
             message.voice = i;
             document.getElementById("selectVoices").selectedIndex = xx;
-            break;
+            return;
         }
         xx++;
     }
