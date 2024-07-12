@@ -77,10 +77,12 @@ message.lang = "";
 
 document.getElementById("rateSlider").addEventListener("change", function (e) {
     message.rate = e.target.value / 100 + 0.5;
+    localStorage.setItem("rate", e.target.value);
 });
 
 document.getElementById("pitchSlider").addEventListener("change", function (e) {
     message.pitch = e.target.value / 100 + 0.5;
+    localStorage.setItem("pitch", e.target.value);
 });
 
 document.getElementById("spacebar").addEventListener("click", function (e) {
@@ -89,6 +91,7 @@ document.getElementById("spacebar").addEventListener("click", function (e) {
 
 document.getElementById("showonscreen").addEventListener("change", function (e) {
     showOnScreen = e.target.checked;
+    localStorage.setItem("showOnScreen", e.target.checked);
 });
 
 document.addEventListener("keydown", function (e) {
@@ -97,8 +100,34 @@ document.addEventListener("keydown", function (e) {
     }
 });
 
+var restarted = false;
+document.getElementById("restart").addEventListener("click", function (e) {
+    if(restarted){
+        return;
+    }
+    restarted = true;
+    speechSynthesis.cancel();
+    setTimeout(function(){
+    speechSynthesis.cancel();
+    enableBuzzer();
+    buzzed = false;
+    restarted = false;
+    startQuestion(currentQuestion);
+    
+    }, 2000);
+
+})
+
 var sleep = function (ms) {
-    return new Promise(function(r){setTimeout(r, ms)});
+    return new Promise(function(r){
+        var i = 0;
+        setInterval(function(){
+            if(i == 3 || restarted){
+                r();
+            }
+            i++;
+        }, ms/3)
+    });
 }
 var sleepUntil = async function(f, ms = 50){
     return new Promise(function(r){
@@ -153,6 +182,33 @@ document.getElementById("selectVoices").addEventListener("change", function(e){
 });
 
 
+if(localStorage.getItem("rate")){
+    var rate = localStorage.getItem("rate");
+    message.rate = rate / 100 + 0.5;
+    document.getElementById("rateSlider").value = rate;
+    document.getElementById("rateSlider").dispatchEvent(new Event("change"));
+}
+
+
+if(localStorage.getItem("pitch")){
+    var pitch = localStorage.getItem("pitch");
+    message.pitch = pitch / 100 + 0.5;
+    document.getElementById("pitchSlider").value = pitch;
+    document.getElementById("pitchSlider").dispatchEvent(new Event("change"));
+}
+
+
+if(localStorage.getItem("showOnScreen")){
+    var showOnScreen = localStorage.getItem("showOnScreen");
+    document.getElementById("showonscreen").checked = showOnScreen == "true";
+    document.getElementById("showonscreen").dispatchEvent(new Event("change"));
+}
+
+if(localStorage.getItem("defaulTimer")){
+    var defaulTimer = localStorage.getItem("defaulTimer");
+    
+}
+
 var allVoices = [];
 speechSynthesis.onvoiceschanged = function(e){
     allVoices = window.speechSynthesis.getVoices();
@@ -197,6 +253,9 @@ var speak = async function (text, showOnScreen, txt2show = text, id = "question"
     var i = 0;
     while (true) {
         i++;
+        if(restarted){
+            return;
+        }
         if(buzzed){
             window.speechSynthesis.cancel();
             if(!showOnScreen){
@@ -241,6 +300,10 @@ var showTimer = function(timer2 = timer){
     document.getElementById("timerContainer").classList.add("fade-in");
     document.getElementById("timerContainer").classList.remove("fade-out");
     document.getElementById("timerContainer").style["display"] = "block";
+
+    document.getElementById("restart").classList.add("fade-in");
+    document.getElementById("restart").classList.remove("fade-out");
+    document.getElementById("restart").style["display"] = "block";
 }
 
 var hideTimer = function(){
@@ -249,6 +312,7 @@ var hideTimer = function(){
     document.getElementById("timerContainer").addEventListener("animationend", function (e) {
         document.getElementById("timerContainer").style["display"] = "none";
     }, { once: true });
+
 }
 var disableBuzzer = function(){
     document.getElementById("spacebar").classList.add("buzzerDisabled");
@@ -270,10 +334,13 @@ var startTimer = async function(){
         if(buzzed == true){
             document.getElementById("timerTimer").style.background = "conic-gradient(rgba(0,0,0,0) 0% " + percentage*100 + "%, rgba(0,255,0,255) " + percentage*100 + "% 100%)";
             buzzed = false;
-            return true;
+            return "true";
         }
         if(time >= fullTimer){
-            return false;
+            return "false";
+        }
+        if(restarted){
+            return "restart";
         }
         await sleep(12);
     }
@@ -302,28 +369,48 @@ var startQuestion = async function(x){
     clearQuestionAndAnswer();
     showTimer(x.timer ?? timer);
     await speak(x.question, showOnScreen, x.question, "question");
-    
     startTimer().then(async function(y){
         var txt = textToShow.replaceAll("\n", "<br>");
-        if(y){
+        if(y == "true"){
             disableBuzzer();
+            if(restarted){return;}
             await sleep(3000);
+            if(restarted){return;}
             hideTimer();
-            await speak("The answer was " + x.spokenAnswer ?? x.answer, true, x.answer, "answer");
+            if(restarted){return;}
+            await speak("The answer was " + (x.spokenAnswer ?? x.answer), true, x.answer, "answer");
+            if(restarted){return;}
             document.getElementById("question").innerHTML = txt;
+            if(restarted){return;}
             enableBuzzer();
+            if(restarted){return;}
             currentQuestion = null;
         }
-        else{
+        else if(y == "false"){
             disableBuzzer();
+            if(restarted){return;}
             beepTimer();
+            if(restarted){return;}
             await sleep(2500);
+            if(restarted){return;}
             hideTimer();
-            await speak("Times up. The answer was " + x.spokenAnswer ?? x.answer, true, x.answer, "answer");
+            if(restarted){return;}
+            await speak("Times up. The answer was " + (x.spokenAnswer ?? x.answer), true, x.answer, "answer");
+            if(restarted){return;}
             document.getElementById("question").innerHTML = txt;
+            if(restarted){return;}
             await sleep(1000);
+            if(restarted){return;}
             enableBuzzer();
+            if(restarted){return;}
             currentQuestion = null;
+        }
+        else if(y == "restart"){
+            return;
+        }
+        else if(y == "skip"){
+            currentQuestion = null;
+            return;
         }
     });
 }
