@@ -15,6 +15,43 @@ var timer = 20;
 var fullTimer = timer;
 var startedTimer = Date.now();
 var showOnScreen = true;
+var score = {
+    correct: 0,
+    incorrect: 0,
+    total: 0
+};
+
+var updateScore = function(){
+    if(score.total == 0){
+        return;
+    }
+    document.getElementById("score").innerHTML = (score.correct) + "/" + (score.total);
+    lockScore();
+    handleSpacebar();
+}
+
+var unlockScore = function(){
+    document.getElementById("correct").style["display"] = "block";
+    document.getElementById("wrong").style["display"] = "block";
+}
+
+var lockScore = function(){
+    document.getElementById("correct").style["display"] = "none";
+    document.getElementById("wrong").style["display"] = "none";
+}
+
+document.getElementById("correct").addEventListener("click", function (e) {
+    score.correct++;
+    score.total++;
+    updateScore();
+})
+
+document.getElementById("wrong").addEventListener("click", function (e) {
+    score.incorrect++;
+    score.total++;
+    updateScore();
+})
+
 
 document.getElementById("input").addEventListener("change", function (e) {
     var file = e.target.files[0];
@@ -140,7 +177,7 @@ var sleepUntil = async function(f, ms = 50){
     })
 }
 var buzzed = false;
-var handleSpacebar = function (e) {
+var handleSpacebar = function (e = {repeat: false}) {
     if(document.getElementById("spacebar").classList.contains("buzzerDisabled") || e.repeat){
         return;
     }
@@ -150,6 +187,7 @@ var handleSpacebar = function (e) {
     if(!currentQuestion){
         currentQuestion = randomQuestion();
         buzzed = false;
+        lockScore();
         startQuestion(currentQuestion);
     }
 }
@@ -361,9 +399,14 @@ clearQuestionAndAnswer = function(){
     document.getElementById("answer").textContent = "";
 }
 
+var showEndScreen = function(){
+    
+}
+
 
 var startQuestion = async function(x){
     if(!x){
+        showEndScreen();
         return;
     }
     clearQuestionAndAnswer();
@@ -374,7 +417,7 @@ var startQuestion = async function(x){
         if(y == "true"){
             disableBuzzer();
             if(restarted){return;}
-            await sleep(3000);
+            await sleep(1000);
             if(restarted){return;}
             hideTimer();
             if(restarted){return;}
@@ -383,6 +426,7 @@ var startQuestion = async function(x){
             document.getElementById("question").innerHTML = txt;
             if(restarted){return;}
             enableBuzzer();
+            unlockScore();
             if(restarted){return;}
             currentQuestion = null;
         }
@@ -391,7 +435,7 @@ var startQuestion = async function(x){
             if(restarted){return;}
             beepTimer();
             if(restarted){return;}
-            await sleep(2500);
+            await sleep(1000);
             if(restarted){return;}
             hideTimer();
             if(restarted){return;}
@@ -402,6 +446,7 @@ var startQuestion = async function(x){
             await sleep(1000);
             if(restarted){return;}
             enableBuzzer();
+            unlockScore();
             if(restarted){return;}
             currentQuestion = null;
         }

@@ -28,10 +28,21 @@
             </div>
         </div>
         <div id="spacebarContainer" class="centerX" style="top: 80%; width: 100%; height: 20%;">
-            <div id="spacebar" class="center buzzerEnabled" style="width: 90%; height: 90%;">
+            <div id="spacebar" class="center buzzerEnabled" style="width: 50%; height: 90%;">
                 <p class="center"
                     style="text-align: center; user-select: none; width: 100%;font-size: 5em; pointer-events: none;letter-spacing: 2vw;font-weight: bold; font-family:Helvetica, sans-serif;">
                     BUZZER</p>
+            </div>
+            <div id="scoreButtonContainer" class = "centerY" style="width: 20%; height: 90%; right: 2.5%;">
+                <button id="correct" class="centerY" style="border: none;display: none;font-size: 1.3em; font-weight: bold; font-family: Helvetica, sans-serif;width: 45%; height: 80%;">
+                    <p class="center" style="pointer-events: none;user-select: none;">CORRECT</p>
+                </button> 
+                <button id="wrong" class="centerY" style="border: none;display: none;font-size: 1.3em; font-weight: bold; font-family: Helvetica, sans-serif;width: 45%; height: 80%;right:0;">
+                    <p class="center" style="pointer-events: none;user-select: none;">WRONG</p>
+                </button> 
+            </div>
+            <div id="scoreContainer" class = "centerY" style="width: 20%; height: 90%; left: 2.5%;">
+                <p id="score" class="center" style="font-size: 5em; font-weight: bold; font-family:Helvetica, sans-serif; color: #F0F0F0"></p>
             </div>
         </div>
         <div id="timerContainer" style="display: none;">

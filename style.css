@@ -1,5 +1,5 @@
 :root {
-    font-size: 2vmin;
+    font-size: calc(0.5vw + 0.5vh);
 }
 
 html,
@@ -102,6 +102,13 @@ body {
     transform: translateX(-50%);
 }
 
+.centerY {
+    top: 50%;
+    position: absolute;
+    margin: 0;
+    transform: translateY(-50%);
+}
+
 .menuButton {
     position: relative;
     background-color: rgb(69, 72, 75);
@@ -194,6 +201,12 @@ body {
     #restartSVG:hover {
         transform: rotate(450deg);
     }
+    #correct:hover {
+        background-color: rgb(0, 255, 0);
+    }
+    #wrong:hover {
+        background-color: rgb(255, 0, 0);
+    }
 }
 
 
@@ -213,3 +226,14 @@ body {
     transition: transform 0.25s ease;
 }
 
+#correct {
+    transition: background-color 0.25s ease;
+    background-color: rgb(0, 125, 0);
+    border-radius: 0.5em;
+}
+
+#wrong {
+    transition: background-color 0.25s ease;
+    background-color: rgb(125, 0, 0);
+    border-radius: 0.5em;
+}
