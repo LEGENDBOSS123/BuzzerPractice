@@ -87,6 +87,15 @@ body {
     cursor: pointer;
 }
 
+#shuffleButton {
+    cursor: pointer;
+}
+
+#resetButton {
+    cursor: pointer;
+}
+
+
 .center {
     left: 50%;
     top: 50%;
@@ -230,10 +239,12 @@ body {
     transition: background-color 0.25s ease;
     background-color: rgb(0, 125, 0);
     border-radius: 0.5em;
+    cursor: pointer;
 }
 
 #wrong {
     transition: background-color 0.25s ease;
     background-color: rgb(125, 0, 0);
     border-radius: 0.5em;
+    cursor: pointer;
 }
